@@ -1,5 +1,15 @@
 package cc.aicode.e2e;
 
+import cc.aicode.e2e.annotation.ExcelEntity;
+import cc.aicode.e2e.annotation.ExcelProperty;
+import cc.aicode.e2e.exception.ExcelContentInvalidException;
+import cc.aicode.e2e.exception.ExcelParseException;
+import cc.aicode.e2e.exception.ExcelRegexpValidFailedException;
+import cc.aicode.e2e.extension.ExcelRule;
+import cc.aicode.e2e.extension.ExcelType;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,34 +24,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-
-import cc.aicode.e2e.annotation.ExcelEntity;
-import cc.aicode.e2e.annotation.ExcelProperty;
-import cc.aicode.e2e.exception.ExcelContentInvalidException;
-import cc.aicode.e2e.exception.ExcelParseException;
-import cc.aicode.e2e.exception.ExcelRegexpValidFailedException;
-import cc.aicode.e2e.extension.ExcelRule;
-import cc.aicode.e2e.extension.ExcelType;
-
 /**
  * EXCEL操作助手函数
- *
+ * <p>
  * 使用方法很简单，只需要使用静态方法readExcel即可。
- *      ExcelHelper eh = ExcelHelper.readExcel("excel文件名");
+ * ExcelHelper eh = ExcelHelper.readExcel("excel文件名");
  * 如果要读取Excel中的标题栏有哪些 `eh.getHeaders()`
  * 如果要读取Excel中的数区域 `eh.getDatas()`
  * 读取到的数据按照Excel中存放的行列形式存放在二维数组中
  * 如果需要转换为实体列表的话 `eh.toEntitys(实体.class)`
  * 注意的是，实体类必须含有@ExcelEntity注解，同时需要用到的属性字段上需要
  * 用@ExcelProperty标注。
- *
  */
 public class ExcelHelper {
     /**
@@ -52,6 +45,17 @@ public class ExcelHelper {
      * 列索引
      */
     private int lastColumnIndex;
+
+    /**
+     * 最大列数
+     */
+    private int maxColumnNumber;
+
+
+    /**
+     * 表头行数
+     */
+    private int firstLine;
     /**
      * 从Excel中读取的标题栏
      */
@@ -480,10 +484,24 @@ public class ExcelHelper {
     /**
      * 解析EXCEL标题栏
      *
-     * @param row
+     * @param
      */
-    private void _parseExcelHeader(Row row) {
-        lastColumnIndex = Math.max(row.getLastCellNum(), MIN_ROW_COLUMN_COUNT);
+    private void _parseExcelHeader(Sheet sheet) {
+
+        sheet.forEach(cells -> {
+            cells.forEach(cell -> {
+                cell.getRichStringCellValue();
+                if (cell.getRichStringCellValue().toString().equals("NAME")) {
+
+                    firstLine = cell.getRowIndex();
+                }
+                System.out.println(cell.getRichStringCellValue());
+            });
+            maxColumnNumber = Math.max(cells.getLastCellNum(), maxColumnNumber);
+
+        });
+        Row row = sheet.getRow(firstLine);
+        lastColumnIndex = Math.max(maxColumnNumber, MIN_ROW_COLUMN_COUNT);
         headers = new String[lastColumnIndex];
         // 初始化headers，每一列的标题
         for (int columnIndex = 0; columnIndex < lastColumnIndex; columnIndex++) {
@@ -505,10 +523,12 @@ public class ExcelHelper {
             Row row = sheet.getRow(rowIndex);
             int rowNumber = rowIndex - rowStart;
             // 读取遍历每一行中的每一列
-            for (int columnIndex = 0; columnIndex < lastColumnIndex; columnIndex++) {
-                Cell cell = row.getCell(columnIndex, Row.RETURN_BLANK_AS_NULL);
-                String value = _getCellValue(cell).trim();
-                datas[rowNumber][columnIndex] = value;
+            if (row != null) {
+                for (int columnIndex = 0; columnIndex < lastColumnIndex; columnIndex++) {
+                    Cell cell = row.getCell(columnIndex, Row.RETURN_BLANK_AS_NULL);
+                    String value = _getCellValue(cell).trim();
+                    datas[rowNumber][columnIndex] = value;
+                }
             }
         }
     }
@@ -568,7 +588,7 @@ public class ExcelHelper {
         int rowEnd = sheet.getLastRowNum();
         // 读取EXCEL标题栏
         ExcelHelper eh = new ExcelHelper();
-        eh._parseExcelHeader(sheet.getRow(0));
+        eh._parseExcelHeader(sheet);
         // 读取EXCEL数据区域内容
         eh._parseExcelData(sheet, rowStart + 1, rowEnd);
         return eh;
@@ -576,7 +596,6 @@ public class ExcelHelper {
 
     /**
      * Excel实体字段类（内部类）
-     *
      */
     private class ExcelEntityField {
         private String columnName;

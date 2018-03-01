@@ -26,7 +26,7 @@ public class AppTest extends TestCase {
     }
 
     public void testApp() throws InvalidFormatException, IOException {
-        ExcelHelper eh = ExcelHelper.readExcel("test_excel.xls");
+        ExcelHelper eh = ExcelHelper.readExcel("HUAXI TML.xlsx");
 
         String[] headers = eh.getHeaders();
         String[][] datas = eh.getDatas();
