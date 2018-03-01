@@ -518,7 +518,8 @@ public class ExcelHelper {
      * @param rowEnd
      */
     private void _parseExcelData(Sheet sheet, int rowStart, int rowEnd) {
-        datas = new String[rowEnd][lastColumnIndex];
+       Integer rowNumer = rowEnd - firstLine;
+        datas = new String[rowNumer][lastColumnIndex];
         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
             Row row = sheet.getRow(rowIndex);
             int rowNumber = rowIndex - rowStart;
@@ -590,7 +591,17 @@ public class ExcelHelper {
         ExcelHelper eh = new ExcelHelper();
         eh._parseExcelHeader(sheet);
         // 读取EXCEL数据区域内容
-        eh._parseExcelData(sheet, rowStart + 1, rowEnd);
+        Integer rowStart2 = null;
+        for (Row cells:sheet) {
+            for (Cell cell: cells) {
+                if (cell.getRichStringCellValue().toString().equals("NAME")) {
+                    rowStart2 = cell.getRowIndex();
+                }
+
+            }
+        }
+
+        eh._parseExcelData(sheet, rowStart2 + 1, rowEnd);
         return eh;
     }
 
