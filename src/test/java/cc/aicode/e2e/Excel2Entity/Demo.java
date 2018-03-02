@@ -1,7 +1,5 @@
 package cc.aicode.e2e.Excel2Entity;
 
-import java.sql.Timestamp;
-
 import cc.aicode.e2e.annotation.ExcelEntity;
 import cc.aicode.e2e.annotation.ExcelProperty;
 
@@ -10,35 +8,35 @@ import cc.aicode.e2e.annotation.ExcelProperty;
  * 参数说明：
  *
  * @author 管宜尧
- *         2013-11-28 下午8:05:04
+ * 2013-11-28 下午8:05:04
  */
 @ExcelEntity
 public class Demo {
-    @ExcelProperty(value = "Name", rule = MyStringCheckRule.class)
+    @ExcelProperty(value = "NAME")
     private String name;
 
-    @ExcelProperty("Sex")
-    private String sex;
+    @ExcelProperty(value = "CJK")
+    private String cjk;
 
-    @ExcelProperty(value = "Age", regexp = "^[1-9]{1}[0-9]{1}$", regexpErrorMessage = "年龄必须在10-99岁之间")
-    private int age;
+    @ExcelProperty(value = "ETB")
+    private String etb;
 
-    @ExcelProperty(value = "Tel", defaultValue = "18678859721", hasDefaultValue = true)
-    private Long tel;
+    @ExcelProperty(value = "ETD")
+    private String etd;
 
-    @ExcelProperty(value = "创建时间")
-    private Timestamp createDate;
+    @ExcelProperty(value = "CARGO")
+    private String cargo;
 
-    @ExcelProperty(value = "Name", required = true)
-    private MyDataType name2;
+    @ExcelProperty(value = "QUANTITY")
+    private String quantity;
 
+    @ExcelProperty(value = "LAST PORT")
+    private String lastProt;
 
-    public Timestamp getCreateDate() {
-        return createDate;
-    }
+    @ExcelProperty(value = "LOA")
+    private String loa;
 
-    public void setCreateDate(Timestamp createDate) {
-        this.createDate = createDate;
+    public Demo() {
     }
 
     public String getName() {
@@ -49,42 +47,59 @@ public class Demo {
         this.name = name;
     }
 
-    public String getSex() {
-        return sex;
+    public String getCjk() {
+        return cjk;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setCjk(String cjk) {
+        this.cjk = cjk;
     }
 
-    public int getAge() {
-        return age;
+    public String getEtb() {
+        return etb;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setEtb(String etb) {
+        this.etb = etb;
     }
 
-    public Long getTel() {
-        return tel;
+    public String getEtd() {
+        return etd;
     }
 
-    public void setTel(Long tel) {
-        this.tel = tel;
+    public void setEtd(String etd) {
+        this.etd = etd;
     }
 
-    public MyDataType getName2() {
-        return name2;
+    public String getCargo() {
+        return cargo;
     }
 
-    public void setName2(MyDataType name2) {
-        this.name2 = name2;
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
-    @Override
-    public String toString() {
-        return "Demo [name=" + name + ", sex=" + sex + ", age=" + age
-                + ", tel=" + tel + ", createDate=" + createDate + ", name2="
-                + name2 + "]";
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getLastProt() {
+        return lastProt;
+    }
+
+    public void setLastProt(String lastProt) {
+        this.lastProt = lastProt;
+    }
+
+    public String getLoa() {
+        return loa;
+    }
+
+    public void setLoa(String loa) {
+        this.loa = loa;
     }
 }
