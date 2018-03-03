@@ -1,17 +1,11 @@
-package cc.aicode.e2e.Excel2Entity;
+package cc.aicode.e2e.domain;
 
 import cc.aicode.e2e.annotation.ExcelEntity;
 import cc.aicode.e2e.annotation.ExcelProperty;
 
 import javax.persistence.*;
 
-/**
- * 功能说明： 测试例子
- * 参数说明：
- *
- * @author 管宜尧
- * 2013-11-28 下午8:05:04
- */
+
 @ExcelEntity
 @Entity
 @Table(name = "excel")
