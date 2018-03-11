@@ -23,7 +23,7 @@ public class DemoResource {
 
     @GetMapping("/go")
     public ResponseEntity<Void> go() throws IOException, InvalidFormatException {
-        demoService.save("");
+        demoService.save("HUAXI TML.xlsx");
         return new ResponseEntity(HttpStatus.OK);
     }
 

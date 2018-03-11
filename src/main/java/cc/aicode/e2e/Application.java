@@ -9,7 +9,6 @@ public class Application {
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Application.class, args);
-        System.out.println("拖入文件");
         DemoService demoService = new DemoService();
 
         try {
