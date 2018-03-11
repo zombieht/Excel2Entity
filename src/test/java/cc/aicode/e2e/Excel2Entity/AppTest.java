@@ -16,7 +16,6 @@ import junit.framework.TestCase;
  * 功能说明： 单元测试
  * 参数说明：
  *
- * @author 管宜尧
  *         2013-11-28 下午8:56:42
  */
 public class AppTest extends TestCase {

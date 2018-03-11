@@ -22,8 +22,17 @@ public class DemoResource {
     private DemoService demoService;
 
     @GetMapping("/go")
-    public ResponseEntity<Void> deleteUser() throws IOException, InvalidFormatException {
-        demoService.save();
+    public ResponseEntity<Void> go() throws IOException, InvalidFormatException {
+        demoService.save("");
         return new ResponseEntity(HttpStatus.OK);
     }
+
+
+    @GetMapping("/create")
+    public ResponseEntity<Void> create() {
+        demoService.createExcel();
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
 }
